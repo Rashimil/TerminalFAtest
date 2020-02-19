@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerminalFAtest.Enums;
+using TerminalFAtest.Extensions;
 
 namespace TerminalFAtest.Models.KKTRequest
 {
@@ -12,11 +13,11 @@ namespace TerminalFAtest.Models.KKTRequest
         public CheckItem(
             string Name,
             decimal Price,
-            ushort Count, // временно целое ushort
+            double Count, 
             VatEnum Vat,
             PaymentMethodEnum PaymentMethod,
             PaymentObjectEnum PaymentObject,
-            string NomenclatureCode,
+            string NomenclatureCode = "",
             string MeasurementUnit = "",
             decimal Excise = 0,
             string CustomsDeclarationNumber = "",
@@ -24,9 +25,18 @@ namespace TerminalFAtest.Models.KKTRequest
             string CustomReq = "")
         {
             // Конвертация с удобоваримого формата:
-            string name = Name; if (name.Length > 128) name = name.Substring(0, 128); // обрезка до 128 символов
+            string name = Name; 
+            if (name.Length > 128) 
+                name = name.Substring(0, 128); // обрезка до 128 символов
             uint price = (uint)Math.Truncate(Price * 100); // в копейках
-            ushort count = Count;
+
+            var correct_count = (uint)Math.Truncate(Count * 1000); // округлили до 3-х знаков после запятой + взяли в мин. единицах
+            var correct_count_arr = BitConverter.GetBytes(correct_count).XReverse();
+            List<byte> count_list = new List<byte>();
+            count_list.Add(0x03);
+            count_list.AddRange(correct_count_arr);
+            byte[] count = count_list.ToArray(); // структура FVLN, нулевой байт - полжение десятичной точки СПРАВА (в hex само собой).  Все остальные байты число в hex в LE
+            
             byte vat = (byte)Vat;
             byte paymentMethod = (byte)PaymentMethod;
             byte paymentObject = (byte)PaymentObject;
@@ -41,7 +51,7 @@ namespace TerminalFAtest.Models.KKTRequest
             // Заполнение:
             this.Name = new KKTRequestProperty<string>() { TAG = 1030, USER_VALUE = name };
             this.Price = new KKTRequestProperty<uint>() { TAG = 1079, USER_VALUE = price };
-            this.Quantity = new KKTRequestProperty<ushort>() { TAG = 1023, USER_VALUE = count };
+            this.Quantity = new KKTRequestProperty<byte[]>() { TAG = 1023, USER_VALUE = count };
             this.Vat = new KKTRequestProperty<byte>() { TAG = 1199, USER_VALUE = vat };
             this.PaymentMethod = new KKTRequestProperty<byte>() { TAG = 1214, USER_VALUE = paymentMethod };
             this.PaymentObject = new KKTRequestProperty<byte>() { TAG = 1212, USER_VALUE = paymentObject };
@@ -54,9 +64,9 @@ namespace TerminalFAtest.Models.KKTRequest
             this.CustomReq = new KKTRequestProperty<string>() { TAG = 1191, USER_VALUE = customReq };
         }
 
-        public KKTRequestProperty<string> Name { get; set; } // Наименование предмета расчета
+        public KKTRequestProperty<string> Name { get; set; } // Наименование предмета расчета ()
         public KKTRequestProperty<uint> Price { get; set; } // Цена за ед. предмета расчета (с учетом скидок и наценок) (тег 1079)
-        public KKTRequestProperty<ushort> Quantity { get; set; } // Количество предмета расчета (временно ushort)
+        public KKTRequestProperty<byte[]> Quantity { get; set; } // Количество предмета расчета (временно ushort)
         public KKTRequestProperty<byte> Vat { get; set; } // Ставка НДС
         public KKTRequestProperty<byte> PaymentMethod { get; set; } // Признак СПОСОБА расчета
         public KKTRequestProperty<byte> PaymentObject { get; set; } /* Признак ПРЕДМЕТА расчета (необязательный параметр) 

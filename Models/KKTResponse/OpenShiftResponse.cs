@@ -19,10 +19,9 @@ namespace TerminalFAtest.Models.KKTResponse
                 var sn = DATA.Take(2).XReverse().ToArray();
                 var fd = DATA.Skip(2).Take(4).XReverse().ToArray();
                 var fpd = DATA.Skip(6).Take(4).XReverse().ToArray();
-                this.ShiftNumber = BitConverter.ToInt16(sn, 0);
-                sn.Reverse();
-                this.FD = BitConverter.ToUInt32(fd, 0).ToString();
-                this.FPD = BitConverter.ToUInt32(fpd, 0).ToString();
+                this.ShiftNumber = logicLevel.ConvertFromByteArray.ToShort(sn);
+                this.FD = logicLevel.ConvertFromByteArray.ToUInt(fd).ToString();
+                this.FPD = logicLevel.ConvertFromByteArray.ToUInt(fpd).ToString();
             }
         }
         public short ShiftNumber { get; set; } // Номер открытой смены

@@ -18,8 +18,10 @@ namespace TerminalFAtest.Models.KKTResponse
             {
                 var shift = DATA[0];
                 this.ShiftOpened = (shift == 0) ? false : true;
-                this.ShiftNumber = BitConverter.ToInt16(new byte[] { DATA[1], DATA[2] }, 0);
-                this.CheckNumber = BitConverter.ToInt16(new byte[] { DATA[3], DATA[4] }, 0);
+                //this.ShiftNumber = BitConverter.ToInt16(new byte[] { DATA[1], DATA[2] }, 0);
+                //this.CheckNumber = BitConverter.ToInt16(new byte[] { DATA[3], DATA[4] }, 0);
+                this.ShiftNumber = logicLevel.ConvertFromByteArray.ToShort(new byte[] { DATA[1], DATA[2] });
+                this.CheckNumber = logicLevel.ConvertFromByteArray.ToShort(new byte[] { DATA[3], DATA[4] });
             }
         }
         public bool ShiftOpened { get; set; } // false – смена закрыта, true – смена открыта 

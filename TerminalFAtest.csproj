@@ -72,21 +72,23 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\KKTRequest\CheckItemOLD.cs" />
+    <Compile Include="Models\KKTRequest\CashierData.cs" />
     <Compile Include="Models\KKTRequest\CheckItem.cs" />
     <Compile Include="Models\KKTRequest\KKTRequestProperty.cs" />
     <Compile Include="Models\KKTRequest\PaymentData.cs" />
+    <Compile Include="Models\KKTRequest\RegisterCheck.cs" />
     <Compile Include="Models\KKTResponse\BaseResponse.cs" />
     <Compile Include="Models\KKTResponse\CloseShiftResponse.cs" />
     <Compile Include="Models\KKTResponse\GetShiftInfoResponse.cs" />
     <Compile Include="Models\KKTResponse\OpenShiftResponse.cs" />
+    <Compile Include="Models\KKTResponse\RegisterCheckResponse.cs" />
     <Compile Include="Models\LogicLevelResponse.cs" />
     <Compile Include="Models\TerminalConnectResult.cs" />
     <Compile Include="Models\TerminalFASettings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\KKT.cs" />
-    <Compile Include="Units\ResponseParser.cs" />
+    <Compile Include="Units\ResponseParser_NOT_USE.cs" />
     <Compile Include="Units\TerminalFA.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

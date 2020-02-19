@@ -159,79 +159,7 @@ namespace TerminalFAtest.Helpers
 
         //==============================================================================================================================================
 
-        // Построение структуры TLV:
-        //public byte[] BuildTLV_OLD<T>(int TAG, T VALUE) // where T : Object
-        //{
-        //    byte[] tag = new byte[] { (byte)TAG, (byte)(TAG >> 8) };
-        //    tlv = new TLV(new byte[0], new byte[0]);
-        //    var tlvList = new List<byte>();
-
-        //    Type t = typeof(T); // VALUE.GetType();
-        //    if (t == typeof(string))
-        //    {
-        //        byte[] value = Encoding.GetEncoding(866).GetBytes(VALUE as string).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(byte))
-        //    {
-        //        byte[] value = new byte[1] { Convert.ToByte(VALUE) };
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(byte[]))
-        //    {
-        //        byte[] value = (VALUE as byte[]).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(ushort))
-        //    {
-        //        byte[] value = BitConverter.GetBytes(Convert.ToUInt16(VALUE)).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(short))
-        //    {
-        //        byte[] value = BitConverter.GetBytes(Convert.ToInt16(VALUE)).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(int))
-        //    {
-        //        byte[] value = BitConverter.GetBytes(Convert.ToInt32(VALUE)).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(uint))
-        //    {
-        //        byte[] value = BitConverter.GetBytes(Convert.ToUInt32(VALUE)).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(ulong))
-        //    {
-        //        byte[] value = BitConverter.GetBytes(Convert.ToUInt64(VALUE)).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(long))
-        //    {
-        //        byte[] value = BitConverter.GetBytes(Convert.ToInt64(VALUE)).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(float))
-        //    {
-        //        byte[] value = BitConverter.GetBytes(Convert.ToSingle(VALUE)).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-        //    else if (t == typeof(double))
-        //    {
-        //        byte[] value = BitConverter.GetBytes(Convert.ToDouble(VALUE)).XReverse().ToArray();
-        //        tlv = new TLV(tag, value);
-        //    }
-
-        //    GetDataFromTLV = new _GetDataFromTLV(tlv);
-
-        //    tlvList.AddRange(tlv.TAG);
-        //    tlvList.AddRange(tlv.LENGTH);
-        //    tlvList.AddRange(tlv.VALUE);
-
-        //    return tlvList.ToArray();
-        //}
-
+        // Построение структуры TLV
         public byte[] BuildTLV(int TAG, object VALUE) // без Generic
         {
             byte[] tag = new byte[] { (byte)TAG, (byte)(TAG >> 8) };
@@ -431,6 +359,10 @@ namespace TerminalFAtest.Helpers
                 }
                 else // неуспешный коннект
                 {
+                    byte[] ciitt = new CRC16CCITT().ComputeCheckSumBytes(new byte[] { 0x00, 0x01, 0x01 });
+                    responseCommand = new byte[] { 0xB6, 0x29, 0x00, 0x01, 0x01, (byte)ErrorCodeEnum.ConnectError, ciitt[0], ciitt[1]}; // минимум 2B START + 2B LENGTH + 1B RESULT + 2B CRC
+                    response = new Response(responseCommand);
+                    result.Set(ErrorCodeEnum.ConnectError);
                     this.FADispose(); // на всякий :3
                 }
             }
@@ -462,6 +394,10 @@ namespace TerminalFAtest.Helpers
             {
                 return BitConverter.ToInt32(data, 0);
             }
+            public uint ToUInt(byte[] data)
+            {
+                return BitConverter.ToUInt32(data, 0);
+            }
             public ulong ToULong(byte[] data)
             {
                 return BitConverter.ToUInt64(data, 0);
@@ -478,6 +414,33 @@ namespace TerminalFAtest.Helpers
             {
                 return BitConverter.ToDouble(data, 0);
             }
+            public DateTime ToDateTime(byte[] data)
+            {
+                if (data.Length == 5) // формат YMDHm (DATETIME[5])
+                {
+                    int day = BitConverter.ToInt16(new byte[] { data[2], 0 }, 0);
+                    int mounth = BitConverter.ToInt16(new byte[] { data[1], 0}, 0);
+                    int year = 2000 + BitConverter.ToInt16(new byte[] {data[0], 0 }, 0);
+                    int hh = BitConverter.ToInt16(new byte[] { data[3], 0 }, 0);
+                    int mm = BitConverter.ToInt16(new byte[] { data[4], 0 }, 0);
+                    int ss = 0;
+                    return new DateTime(year, mounth, day, hh, mm, ss);
+                }
+                else if (data.Length == 3) // формат YMD (DATETIME[3])
+                {
+                    int day = BitConverter.ToInt16(new byte[] { data[2], 0 }, 0);
+                    int mounth = BitConverter.ToInt16(new byte[] { data[1], 0 }, 0);
+                    int year = 2000 + BitConverter.ToInt16(new byte[] { data[0], 0 }, 0);
+                    int hh = 0;
+                    int mm = 0;
+                    int ss = 0;
+                    return new DateTime(year, mounth, day, hh, mm, ss);
+                }
+                else
+                {
+                    return DateTime.MinValue;
+                }
+            }
         }
 
         //==============================================================================================================================================
@@ -485,11 +448,11 @@ namespace TerminalFAtest.Helpers
         // Конвертация разных форматов в массив byte[]
         public byte[] ConvertToByteArray<T>(T VALUE)
         {
-            Type t = typeof(T); // VALUE.GetType();
+            Type t = VALUE.GetType();  // Type t = typeof(T) - не работаетЮ возвращает object
             byte[] value;
             if (t == typeof(string))
             {
-                value = Encoding.GetEncoding(866).GetBytes(VALUE as string);
+                value = Encoding.GetEncoding(866).GetBytes(VALUE as string).XReverse().ToArray();
                 return value;
             }
             else if (t == typeof(byte))
@@ -497,39 +460,44 @@ namespace TerminalFAtest.Helpers
                 value = new byte[1] { Convert.ToByte(VALUE) };
                 return value;
             }
+            else if (t == typeof(byte[]))
+            {
+                value = VALUE as byte[];
+                return value;
+            }
             else if (t == typeof(ushort))
             {
-                value = BitConverter.GetBytes(Convert.ToUInt16(VALUE));
+                value = BitConverter.GetBytes(Convert.ToUInt16(VALUE)).XReverse().ToArray();
                 return value;
             }
             else if (t == typeof(short))
             {
-                value = BitConverter.GetBytes(Convert.ToInt16(VALUE));
+                value = BitConverter.GetBytes(Convert.ToInt16(VALUE)).XReverse().ToArray();
                 return value;
             }
             else if (t == typeof(int))
             {
-                value = BitConverter.GetBytes(Convert.ToInt32(VALUE));
+                value = BitConverter.GetBytes(Convert.ToInt32(VALUE)).XReverse().ToArray();
                 return value;
             }
             else if (t == typeof(ulong))
             {
-                value = BitConverter.GetBytes(Convert.ToUInt64(VALUE));
+                value = BitConverter.GetBytes(Convert.ToUInt64(VALUE)).XReverse().ToArray();
                 return value;
             }
             else if (t == typeof(long))
             {
-                value = BitConverter.GetBytes(Convert.ToInt64(VALUE));
+                value = BitConverter.GetBytes(Convert.ToInt64(VALUE)).XReverse().ToArray();
                 return value;
             }
             else if (t == typeof(float))
             {
-                value = BitConverter.GetBytes(Convert.ToSingle(VALUE));
+                value = BitConverter.GetBytes(Convert.ToSingle(VALUE)).XReverse().ToArray();
                 return value;
             }
             else if (t == typeof(double))
             {
-                value = BitConverter.GetBytes(Convert.ToDouble(VALUE));
+                value = BitConverter.GetBytes(Convert.ToDouble(VALUE)).XReverse().ToArray();
                 return value;
             }
             return null;

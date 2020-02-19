@@ -40,6 +40,8 @@
             this.OpenCheck = new System.Windows.Forms.Button();
             this.SendCheckPosition = new System.Windows.Forms.Button();
             this.SendPaymentData = new System.Windows.Forms.Button();
+            this.RegisterCheck = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxLog
@@ -48,7 +50,7 @@
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLog.Size = new System.Drawing.Size(516, 424);
+            this.textBoxLog.Size = new System.Drawing.Size(516, 489);
             this.textBoxLog.TabIndex = 9999999;
             // 
             // GetShiftInfo
@@ -93,7 +95,7 @@
             // 
             // CancelFiscalDocument
             // 
-            this.CancelFiscalDocument.Location = new System.Drawing.Point(21, 408);
+            this.CancelFiscalDocument.Location = new System.Drawing.Point(12, 473);
             this.CancelFiscalDocument.Name = "CancelFiscalDocument";
             this.CancelFiscalDocument.Size = new System.Drawing.Size(226, 28);
             this.CancelFiscalDocument.TabIndex = 10000003;
@@ -151,11 +153,32 @@
             this.SendPaymentData.UseVisualStyleBackColor = true;
             this.SendPaymentData.Click += new System.EventHandler(this.SendPaymentData_Click);
             // 
+            // RegisterCheck
+            // 
+            this.RegisterCheck.Location = new System.Drawing.Point(12, 387);
+            this.RegisterCheck.Name = "RegisterCheck";
+            this.RegisterCheck.Size = new System.Drawing.Size(226, 28);
+            this.RegisterCheck.TabIndex = 10000009;
+            this.RegisterCheck.Text = "RegisterCheck";
+            this.RegisterCheck.UseVisualStyleBackColor = true;
+            this.RegisterCheck.Click += new System.EventHandler(this.RegisterCheck_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(812, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(226, 28);
+            this.button1.TabIndex = 10000010;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1136, 513);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.RegisterCheck);
             this.Controls.Add(this.SendPaymentData);
             this.Controls.Add(this.SendCheckPosition);
             this.Controls.Add(this.OpenCheck);
@@ -191,6 +214,8 @@
         private System.Windows.Forms.Button OpenCheck;
         private System.Windows.Forms.Button SendCheckPosition;
         private System.Windows.Forms.Button SendPaymentData;
+        private System.Windows.Forms.Button RegisterCheck;
+        private System.Windows.Forms.Button button1;
     }
 }
 

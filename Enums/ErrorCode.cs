@@ -219,7 +219,10 @@ namespace TerminalFAtest.Enums
         UnknownError = 0xFF,
 
         [Description("Неизвестное исключение")]
-        UnknownErrorExc = 0xFE
+        UnknownErrorExc = 0xFE,
+
+        [Description("Нет связи с ККТ")]
+        ConnectError = 0xFD
     }
 
     //==============================================================================================================================================

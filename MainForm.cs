@@ -45,7 +45,8 @@ namespace TerminalFAtest
         private void SendCashierData_Click(object sender, EventArgs e)
         {
             var kkt = new KKT();
-            BaseResponse br = kkt.SendCashierData("Иванов И. И.", "929655906720");
+            CashierData cashierData = new CashierData("Иванов И. И.", "929655906720");
+            BaseResponse br = kkt.SendCashierData(cashierData);
             string r = new KKTResponseHelper().BuildResponseString(br);
             textBoxLog.AppendText(r);
         }
@@ -94,29 +95,20 @@ namespace TerminalFAtest
         {
             var kkt = new KKT();
 
-            //CheckItemOLD checkItem = new CheckItemOLD() {
-            //    Name = "Сок апельсиновый",
-            //    Price = 150.00M,
-            //    Quantity = 1, // временно целое
-            //    Vat = VatEnum.Vat20,
-            //    PaymentMethod = PaymentMethodEnum.FullPayment,
-            //    PaymentObject = PaymentObjectEnum.Commodity,
-            //    NomenclatureCode = "05AB1208",
-            //    MeasurementUnit = "",
-            //    Excise = 0,
-            //    CustomsDeclarationNumber = "",
-            //    CountryCode = "",
-            //    CustomReq = ""
-            //};
-
             CheckItem checkItemNEW = new CheckItem(
                 "Сок апельсиновый",
                 150.00M,
-                1,
+                1.23,
                 VatEnum.Vat20,
                 PaymentMethodEnum.FullPayment,
                 PaymentObjectEnum.Commodity,
-                "05AB1208"
+                //"05AB1208",
+                "",
+                "шт",
+                0,
+                "123456",
+                "643",
+                "CustomReq - доп реквизит бла бла бла"
                 );
 
 
@@ -129,16 +121,39 @@ namespace TerminalFAtest
         {
             var kkt = new KKT();
 
+            CashierData cashierData = new CashierData("Иванов И. И.", "929655906720");
+
             PaymentData paymentData = new PaymentData(
                 TaxTypeEnum.Common,
-                150.00M,
+                184.50M,
                 0,
                 0,
                 0,
                 0,
-                "khamitovsv@brsc.ru"
+                "khamitovsv@brsc.ru",
+                "",
+                cashierData.CashierFIO,
+                cashierData.CashierINN,
+                "Клиент Петров П. П.",
+                "Доп реквизит",
+                "Наименование доп реквизита пользователя",
+                "Значение доп реквизита пользователя"
                 );
             BaseResponse br = kkt.SendPaymentData(paymentData);
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void RegisterCheck_Click(object sender, EventArgs e)
+        {
+            var kkt = new KKT();
+
+            TerminalFAtest.Models.KKTRequest.RegisterCheck registerCheck = new TerminalFAtest.Models.KKTRequest.RegisterCheck(
+                OperationEnum.Sell,
+                184.50M,
+                "Длинная строка для печати на чеке до 512 символов"
+                );
+            RegisterCheckResponse br = kkt.RegisterCheck(registerCheck);
             string r = new KKTResponseHelper().BuildResponseString(br);
             textBoxLog.AppendText(r);
         }
