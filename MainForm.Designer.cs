@@ -41,7 +41,15 @@
             this.SendCheckPosition = new System.Windows.Forms.Button();
             this.SendPaymentData = new System.Windows.Forms.Button();
             this.RegisterCheck = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.SendAutomaticDeviceData = new System.Windows.Forms.Button();
+            this.GetFnNumber = new System.Windows.Forms.Button();
+            this.GetKktStatus = new System.Windows.Forms.Button();
+            this.GetRegistrationParameters = new System.Windows.Forms.Button();
+            this.GetFirmwareVersion = new System.Windows.Forms.Button();
+            this.OpenCorrectionCheck = new System.Windows.Forms.Button();
+            this.SendCorrectionCheckData = new System.Windows.Forms.Button();
+            this.SendCorrectionAutomaticDeviceData = new System.Windows.Forms.Button();
+            this.RegisterCorrectionCheck = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxLog
@@ -50,7 +58,7 @@
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLog.Size = new System.Drawing.Size(516, 489);
+            this.textBoxLog.Size = new System.Drawing.Size(516, 553);
             this.textBoxLog.TabIndex = 9999999;
             // 
             // GetShiftInfo
@@ -155,7 +163,7 @@
             // 
             // RegisterCheck
             // 
-            this.RegisterCheck.Location = new System.Drawing.Point(12, 387);
+            this.RegisterCheck.Location = new System.Drawing.Point(12, 421);
             this.RegisterCheck.Name = "RegisterCheck";
             this.RegisterCheck.Size = new System.Drawing.Size(226, 28);
             this.RegisterCheck.TabIndex = 10000009;
@@ -163,21 +171,110 @@
             this.RegisterCheck.UseVisualStyleBackColor = true;
             this.RegisterCheck.Click += new System.EventHandler(this.RegisterCheck_Click);
             // 
-            // button1
+            // SendAutomaticDeviceData
             // 
-            this.button1.Location = new System.Drawing.Point(812, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(226, 28);
-            this.button1.TabIndex = 10000010;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.SendAutomaticDeviceData.Location = new System.Drawing.Point(12, 368);
+            this.SendAutomaticDeviceData.Name = "SendAutomaticDeviceData";
+            this.SendAutomaticDeviceData.Size = new System.Drawing.Size(226, 28);
+            this.SendAutomaticDeviceData.TabIndex = 10000010;
+            this.SendAutomaticDeviceData.Text = "SendAutomaticDeviceData";
+            this.SendAutomaticDeviceData.UseVisualStyleBackColor = true;
+            this.SendAutomaticDeviceData.Click += new System.EventHandler(this.SendAutomaticDeviceData_Click);
+            // 
+            // GetFnNumber
+            // 
+            this.GetFnNumber.Location = new System.Drawing.Point(12, 537);
+            this.GetFnNumber.Name = "GetFnNumber";
+            this.GetFnNumber.Size = new System.Drawing.Size(226, 28);
+            this.GetFnNumber.TabIndex = 10000011;
+            this.GetFnNumber.Text = "GetFnNumber";
+            this.GetFnNumber.UseVisualStyleBackColor = true;
+            this.GetFnNumber.Click += new System.EventHandler(this.GetFnNumber_Click);
+            // 
+            // GetKktStatus
+            // 
+            this.GetKktStatus.Location = new System.Drawing.Point(819, 12);
+            this.GetKktStatus.Name = "GetKktStatus";
+            this.GetKktStatus.Size = new System.Drawing.Size(226, 28);
+            this.GetKktStatus.TabIndex = 10000012;
+            this.GetKktStatus.Text = "GetKktStatus";
+            this.GetKktStatus.UseVisualStyleBackColor = true;
+            this.GetKktStatus.Click += new System.EventHandler(this.GetKktStatus_Click);
+            // 
+            // GetRegistrationParameters
+            // 
+            this.GetRegistrationParameters.Location = new System.Drawing.Point(819, 46);
+            this.GetRegistrationParameters.Name = "GetRegistrationParameters";
+            this.GetRegistrationParameters.Size = new System.Drawing.Size(226, 28);
+            this.GetRegistrationParameters.TabIndex = 10000013;
+            this.GetRegistrationParameters.Text = "GetRegistrationParameters";
+            this.GetRegistrationParameters.UseVisualStyleBackColor = true;
+            this.GetRegistrationParameters.Click += new System.EventHandler(this.GetRegistrationParameters_Click);
+            // 
+            // GetFirmwareVersion
+            // 
+            this.GetFirmwareVersion.Location = new System.Drawing.Point(819, 80);
+            this.GetFirmwareVersion.Name = "GetFirmwareVersion";
+            this.GetFirmwareVersion.Size = new System.Drawing.Size(226, 28);
+            this.GetFirmwareVersion.TabIndex = 10000014;
+            this.GetFirmwareVersion.Text = "GetFirmwareVersion";
+            this.GetFirmwareVersion.UseVisualStyleBackColor = true;
+            this.GetFirmwareVersion.Click += new System.EventHandler(this.GetFirmwareVersion_Click);
+            // 
+            // OpenCorrectionCheck
+            // 
+            this.OpenCorrectionCheck.Location = new System.Drawing.Point(819, 147);
+            this.OpenCorrectionCheck.Name = "OpenCorrectionCheck";
+            this.OpenCorrectionCheck.Size = new System.Drawing.Size(226, 28);
+            this.OpenCorrectionCheck.TabIndex = 10000015;
+            this.OpenCorrectionCheck.Text = "OpenCorrectionCheck";
+            this.OpenCorrectionCheck.UseVisualStyleBackColor = true;
+            this.OpenCorrectionCheck.Click += new System.EventHandler(this.OpenCorrectionCheck_Click);
+            // 
+            // SendCorrectionCheckData
+            // 
+            this.SendCorrectionCheckData.Location = new System.Drawing.Point(819, 182);
+            this.SendCorrectionCheckData.Name = "SendCorrectionCheckData";
+            this.SendCorrectionCheckData.Size = new System.Drawing.Size(226, 28);
+            this.SendCorrectionCheckData.TabIndex = 10000016;
+            this.SendCorrectionCheckData.Text = "SendCorrectionCheckData";
+            this.SendCorrectionCheckData.UseVisualStyleBackColor = true;
+            this.SendCorrectionCheckData.Click += new System.EventHandler(this.SendCorrectionCheckData_Click);
+            // 
+            // SendCorrectionAutomaticDeviceData
+            // 
+            this.SendCorrectionAutomaticDeviceData.Location = new System.Drawing.Point(819, 216);
+            this.SendCorrectionAutomaticDeviceData.Name = "SendCorrectionAutomaticDeviceData";
+            this.SendCorrectionAutomaticDeviceData.Size = new System.Drawing.Size(226, 28);
+            this.SendCorrectionAutomaticDeviceData.TabIndex = 10000017;
+            this.SendCorrectionAutomaticDeviceData.Text = "SendCorrectionAutomaticDeviceData";
+            this.SendCorrectionAutomaticDeviceData.UseVisualStyleBackColor = true;
+            this.SendCorrectionAutomaticDeviceData.Click += new System.EventHandler(this.SendCorrectionAutomaticDeviceData_Click);
+            // 
+            // RegisterCorrectionCheck
+            // 
+            this.RegisterCorrectionCheck.Location = new System.Drawing.Point(819, 250);
+            this.RegisterCorrectionCheck.Name = "RegisterCorrectionCheck";
+            this.RegisterCorrectionCheck.Size = new System.Drawing.Size(226, 28);
+            this.RegisterCorrectionCheck.TabIndex = 10000018;
+            this.RegisterCorrectionCheck.Text = "RegisterCorrectionCheck";
+            this.RegisterCorrectionCheck.UseVisualStyleBackColor = true;
+            this.RegisterCorrectionCheck.Click += new System.EventHandler(this.RegisterCorrectionCheck_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1136, 513);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(1136, 577);
+            this.Controls.Add(this.RegisterCorrectionCheck);
+            this.Controls.Add(this.SendCorrectionAutomaticDeviceData);
+            this.Controls.Add(this.SendCorrectionCheckData);
+            this.Controls.Add(this.OpenCorrectionCheck);
+            this.Controls.Add(this.GetFirmwareVersion);
+            this.Controls.Add(this.GetRegistrationParameters);
+            this.Controls.Add(this.GetKktStatus);
+            this.Controls.Add(this.GetFnNumber);
+            this.Controls.Add(this.SendAutomaticDeviceData);
             this.Controls.Add(this.RegisterCheck);
             this.Controls.Add(this.SendPaymentData);
             this.Controls.Add(this.SendCheckPosition);
@@ -215,7 +312,15 @@
         private System.Windows.Forms.Button SendCheckPosition;
         private System.Windows.Forms.Button SendPaymentData;
         private System.Windows.Forms.Button RegisterCheck;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button SendAutomaticDeviceData;
+        private System.Windows.Forms.Button GetFnNumber;
+        private System.Windows.Forms.Button GetKktStatus;
+        private System.Windows.Forms.Button GetRegistrationParameters;
+        private System.Windows.Forms.Button GetFirmwareVersion;
+        private System.Windows.Forms.Button OpenCorrectionCheck;
+        private System.Windows.Forms.Button SendCorrectionCheckData;
+        private System.Windows.Forms.Button SendCorrectionAutomaticDeviceData;
+        private System.Windows.Forms.Button RegisterCorrectionCheck;
     }
 }
 

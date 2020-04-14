@@ -60,6 +60,7 @@
     <Compile Include="Enums\SystemByteOrder.cs" />
     <Compile Include="Enums\Vat.cs" />
     <Compile Include="Enums\TaxType.cs" />
+    <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Helpers\ByteOrderHelper.cs" />
     <Compile Include="Helpers\CRC16CCITT.cs" />
@@ -72,16 +73,26 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\KKTRequest\AuthorizedPersonData.cs" />
+    <Compile Include="Models\KKTRequest\AutomaticDeviceData.cs" />
     <Compile Include="Models\KKTRequest\CashierData.cs" />
     <Compile Include="Models\KKTRequest\CheckItem.cs" />
+    <Compile Include="Models\KKTRequest\ClientData.cs" />
+    <Compile Include="Models\KKTRequest\CorrectionCheckData.cs" />
     <Compile Include="Models\KKTRequest\KKTRequestProperty.cs" />
     <Compile Include="Models\KKTRequest\PaymentData.cs" />
     <Compile Include="Models\KKTRequest\RegisterCheck.cs" />
+    <Compile Include="Models\KKTRequest\RegisterCorrectionCheck.cs" />
     <Compile Include="Models\KKTResponse\BaseResponse.cs" />
     <Compile Include="Models\KKTResponse\CloseShiftResponse.cs" />
+    <Compile Include="Models\KKTResponse\GetFirmwareVersionResponse.cs" />
+    <Compile Include="Models\KKTResponse\GetFnNumberResponse.cs" />
+    <Compile Include="Models\KKTResponse\GetKktStatusResponse.cs" />
+    <Compile Include="Models\KKTResponse\GetRegistrationParametersResponse.cs" />
     <Compile Include="Models\KKTResponse\GetShiftInfoResponse.cs" />
     <Compile Include="Models\KKTResponse\OpenShiftResponse.cs" />
     <Compile Include="Models\KKTResponse\RegisterCheckResponse.cs" />
+    <Compile Include="Models\KKTResponse\RegisterCorrectionCheckResponse.cs" />
     <Compile Include="Models\LogicLevelResponse.cs" />
     <Compile Include="Models\TerminalConnectResult.cs" />
     <Compile Include="Models\TerminalFASettings.cs" />

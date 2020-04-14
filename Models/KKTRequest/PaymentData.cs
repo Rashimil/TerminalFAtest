@@ -8,6 +8,13 @@ using TerminalFAtest.Enums;
 namespace TerminalFAtest.Models.KKTRequest
 {
     // Данные оплаты (для команды 0x2D)
+
+    /*
+     Режим налогообложения (TaxType) может включать только одно из значений режимов, указанных при регистрации
+    (перерегистрации) ККТ (См. команду 0x0A - Запрос текущих параметров регистрации ККТ)
+    Тэг 1203 (ИНН Кассира) указывается при наличии ИНН у кассира
+    Тэги 1021, 1203 в автоматическом режиме могут не указываться
+     */
     public class PaymentData
     {
         public PaymentData(
@@ -17,11 +24,8 @@ namespace TerminalFAtest.Models.KKTRequest
             decimal PREPAID,
             decimal CREDIT,
             decimal OTHER,
-            string ClientEmail = "",
-            string ClientINN = "            ", // 12 пробелов
-            string CashierFIO = "",
-            string CashierINN = "",
-            string ClientName = "",
+            CashierData cashierData,
+            ClientData clientData,
             string CustomReq = "",
             string CustomUserReqName = "",
             string CustomUserReqValue = ""
@@ -35,21 +39,27 @@ namespace TerminalFAtest.Models.KKTRequest
             uint credit = (uint)Math.Truncate(CREDIT * 100); // в копейках
             uint other = (uint)Math.Truncate(OTHER * 100); // в копейках
 
-            string clientEmail = ClientEmail; 
+            string clientEmail = clientData.ClientEmail; 
             if (clientEmail.Length > 64) 
                 clientEmail = clientEmail.Substring(0, 64); // обрезка 
-            string clientINN = ClientINN; 
+            string clientINN = clientData.ClientINN; 
             if (clientINN.Length > 12) 
                 clientINN = clientINN.Substring(0, 12); // обрезка 
-            string cashierFIO = CashierFIO; 
+
+
+            string cashierFIO = cashierData.CashierFIO; 
             if (cashierFIO.Length > 64) 
                 cashierFIO = cashierFIO.Substring(0, 64); // обрезка 
-            string cashierINN = CashierINN;
+            string cashierINN = cashierData.CashierINN;
             if (cashierINN.Length > 12) 
                 cashierINN = cashierINN.Substring(0, 12); // обрезка 
             if (cashierINN.Length < 12) 
                 cashierINN = cashierINN.PadLeft(12, ' '); // добивка пробелами до 12 символов 
-            string сlientName = ClientName; 
+            //cashierFIO = "";
+            //cashierINN = "12345";
+
+
+            string сlientName = clientData.ClientName; 
             if (сlientName.Length > 255) 
                 сlientName = сlientName.Substring(0, 255); // обрезка 
             string сustomReq = CustomReq; 

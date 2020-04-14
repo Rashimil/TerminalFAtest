@@ -72,7 +72,7 @@ namespace TerminalFAtest.Units
         }
 
         // Передать данные кассира(0x2F) (не обязательно для ККТ в составе автоматических устройств)
-        public BaseResponse SendCashierData(CashierData cashierData) // !!! ТОЛЬКО ИНН ФИЗЛИЦА, НЕ ЮРЛИЦА !!!
+        public BaseResponse SendCashierData(CashierData cashierData)
         {
             logicLevel = new LogicLevel();
 
@@ -326,7 +326,7 @@ namespace TerminalFAtest.Units
                 }
                 catch (Exception)
                 {
-                }          
+                }
             }
             byte[] DATA = logicLevel.BuildSTLV(1059, stlvList);
             logicLevel.BuildRequestCommand((byte)CommandEnum.CHECK_POSITION, DATA);
@@ -417,14 +417,37 @@ namespace TerminalFAtest.Units
         }
 
         // Передать данные автоматического устройства расчетов для кассового чек (0x1F)
-        public BaseResponse SendAutomaticDeviceData()
+        public BaseResponse SendAutomaticDeviceData(AutomaticDeviceData automaticDeviceData)
         {
             logicLevel = new LogicLevel();
             var tlvList = new List<byte>();
             byte[] tlv;
-
-            // SEND_AUTOMATIC_DEVICE_DATA
-            return null;
+            foreach (var item in automaticDeviceData.GetType().GetProperties())
+            {
+                try
+                {
+                    var val = item.GetValue(automaticDeviceData).GetType().GetProperties();
+                    var TAG = (int)val[0].GetValue(item.GetValue(automaticDeviceData));
+                    var USER_VALUE = val[1].GetValue(item.GetValue(automaticDeviceData));
+                    tlv = logicLevel.BuildTLV(TAG, USER_VALUE);
+                    tlvList.AddRange(tlv);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            byte[] DATA = tlvList.ToArray();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.SEND_AUTOMATIC_DEVICE_DATA, DATA);
+            var LLResponse = logicLevel.SendRequestCommand();
+            if (LLResponse.connectResult.Connected)
+            {
+                return new BaseResponse(logicLevel);
+            }
+            else
+            {
+                //return null;
+                return new BaseResponse(logicLevel);
+            }
         }
 
         // Сформировать чек (0x24)
@@ -460,10 +483,239 @@ namespace TerminalFAtest.Units
         //==============================================================================================================================================
 
         // 2 - Формирование кассового чека коррекции
+
+        // Открыть кассовый чек коррекции (0x25)
+        public BaseResponse OpenCorrectionCheck()
+        {
+            logicLevel = new LogicLevel();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.OPEN_CORRECTION_CHECK);
+            var LLResponse = logicLevel.SendRequestCommand();
+            if (LLResponse.connectResult.Connected)
+            {
+                return new BaseResponse(logicLevel);
+            }
+            else
+            {
+                //return null;
+                return new BaseResponse(logicLevel);
+            }
+        }
+
+        // Передать данные чека коррекции (0x2E)
+        public BaseResponse SendCorrectionCheckData(CorrectionCheckData correctionCheckData)
+        {
+            #region MyRegion
+            /*
+                B6 29 start
+                00 8B len(BE!)
+                2E command
+	                FD 03 tag = 1021 // ФИО уполномоченного лица 
+	                0C 00 len = 12
+		                88 A2 A0 AD AE A2 20 88 2E 20 88 2E // Иванов И. И.
+	                B3 04 tag
+	                0C 00 len = 12
+		                31 32 33 34 35 36 37 38 39 30 31 32 // 123456789012
+	                95 04 tag = 1173 // Тип коррекции
+	                01 00 len 
+		                00 
+	                96 04 tag = 1174 // Основание для коррекции. STLV
+	                23 00 len = 35
+		                99 04 tag = 1177 // Наименование документа основания для коррекции
+		                12 00 len = 18
+			                92 A5 E1 E2 AE A2 A0 EF 20 AA AE E0 E0 A5 AA E6 A8 EF // Тестовая коррекция
+		                9A 04 tag = 1178 // Дата документа основания для коррекции (UNIXTIME) без минут и секунд
+		                04 00 len = 4
+			                80 7B 69 5E // 12.03.2020
+		                9B 04 tag = 1179 // Номер документа основания для коррекции. Но в доках он 1023!!!
+		                01 00 len = 1
+			                31 // 1
+	                1F 04 tag = 1055 // Применяемая система налогообложения
+	                01 00 len = 1		 
+		                01 
+	                07 04 tag = 1031 // Сумма по чеку наличными в копейках
+	                02 00 len = 2
+		                10 27 // 10000
+	                39 04 tag = 1081 //  Сумма по чеку электронными
+	                01 00 
+		                00 
+	                BF 04 tag = 1215 // Сумма по чеку Предоплатой
+	                01 00 
+		                00 
+	                C0 04 tag = 1216 // Сумма по чеку Постоплатой
+	                01 00 
+		                00 
+	                C1 04 tag = 1217 // Сумма по чеку Встречным предоставлением
+	                01 00 
+		                00 
+	                4E 04 tag = 1102 // Сумма по чеку, от которой считается НДС по ставке 20% (в копейках)
+	                01 00 
+		                00 
+	                4F 04 tag = 1103 // Сумма по чеку, от которой считается НДС по ставке 10% (в копейках)
+	                01 00 
+		                00 
+	                50 04 tag = 1104 // Сумма по чеку, от которой считается НДС по ставке 0% (в копейках) 1104
+	                01 00 
+		                00 
+	                51 04 tag = 1105 // Сумма по чеку, от которой считается НДС по ставке без НДС (в копейках
+	                02 00 
+		                10 27 // 10000
+	                52 04 tag = 1106 // Сумма по чеку, от которой считается НДС по ставке 20/120% (в копейках)
+	                01 00 
+		                00 
+	                53 04 tag = 1107 // Сумма по чеку, от которой считается НДС по ставке 10/110% (в копейках)
+	                01 00 
+		                00 
+                DA DC crc
+             */
+            #endregion
+
+            logicLevel = new LogicLevel();
+            var tlvList = new List<byte>();
+            byte[] tlv;
+            foreach (var item in correctionCheckData.GetType().GetProperties())
+            {
+                try
+                {
+                    var val = item.GetValue(correctionCheckData).GetType().GetProperties();
+                    var TAG = (int)val[0].GetValue(item.GetValue(correctionCheckData));
+                    var USER_VALUE = val[1].GetValue(item.GetValue(correctionCheckData));
+                    tlv = logicLevel.BuildTLV(TAG, USER_VALUE);
+                    tlvList.AddRange(tlv);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            byte[] DATA = tlvList.ToArray();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.CORRECTION_DATA, DATA);
+            var LLResponse = logicLevel.SendRequestCommand();
+            if (LLResponse.connectResult.Connected)
+            {
+                return new BaseResponse(logicLevel);
+            }
+            else
+            {
+                return new BaseResponse(logicLevel);
+            }
+        }
+
+        // Передать данные автоматического устройства расчетов для кассового чека (БСО) коррекции (0x3F)
+        public BaseResponse SendCorrectionAutomaticDeviceData(AutomaticDeviceData automaticDeviceData)
+        {
+            logicLevel = new LogicLevel();
+            var tlvList = new List<byte>();
+            byte[] tlv;
+            foreach (var item in automaticDeviceData.GetType().GetProperties())
+            {
+                try
+                {
+                    var val = item.GetValue(automaticDeviceData).GetType().GetProperties();
+                    var TAG = (int)val[0].GetValue(item.GetValue(automaticDeviceData));
+                    var USER_VALUE = val[1].GetValue(item.GetValue(automaticDeviceData));
+                    tlv = logicLevel.BuildTLV(TAG, USER_VALUE);
+                    tlvList.AddRange(tlv);
+                }
+                catch (Exception)
+                {
+                }
+            }
+            byte[] DATA = tlvList.ToArray();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.SEND_CORRECTION_AUTOMATIC_DEVICE_DATA, DATA);
+            var LLResponse = logicLevel.SendRequestCommand();
+            if (LLResponse.connectResult.Connected)
+            {
+                return new BaseResponse(logicLevel);
+            }
+            else
+            {
+                //return null;
+                return new BaseResponse(logicLevel);
+            }
+        }
+
+        // Сформировать чек коррекции (0x26) 
+        public RegisterCorrectionCheckResponse RegisterCorrectionCheck(RegisterCorrectionCheck registerCorrectionCheck)
+        {
+            logicLevel = new LogicLevel();
+            var list = new List<byte>();
+            foreach (var item in registerCorrectionCheck.GetType().GetProperties())
+            {
+                try
+                {
+                    var USER_VALUE = item.GetValue(registerCorrectionCheck);
+                    list.AddRange(logicLevel.ConvertToByteArray(USER_VALUE));
+                }
+                catch (Exception)
+                {
+                }
+            }
+            byte[] DATA = list.ToArray();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.CORRECTION_CHECK, DATA);
+            var LLResponse = logicLevel.SendRequestCommand();
+            if (LLResponse.connectResult.Connected)
+            {
+                return new RegisterCorrectionCheckResponse(logicLevel);
+            }
+            else
+            {
+                //return null;
+                return new RegisterCorrectionCheckResponse(logicLevel);
+            }
+        }
+
+
+
         // 3 - Формирование отчета о состоянии расчетов
         // 4 - Получение данных из архива ФН
         // 
         // 
+
+        //==============================================================================================================================================
+
+        // Получить номер ФН
+        public GetFnNumberResponse GetFnNumber()
+        {
+            logicLevel = new LogicLevel();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.GET_FN_NUMBER);
+            var LLResponse = logicLevel.SendRequestCommand();
+            if (LLResponse.connectResult.Connected)
+            {
+                return new GetFnNumberResponse(logicLevel);
+            }
+            else
+            {
+                //return null;
+                return new GetFnNumberResponse(logicLevel);
+            }
+        }
+
+        // Запрос статуса ККТ
+        public GetKktStatusResponse GetKktStatus()
+        {
+            logicLevel = new LogicLevel();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.GET_STATUS);
+            var LLResponse = logicLevel.SendRequestCommand();
+            return new GetKktStatusResponse(logicLevel);
+
+        }
+
+        // Запрос текущих параметров регистрации ККТ GET_REGISTRATION_PARAMETERS
+        public GetRegistrationParametersResponse GetRegistrationParameters()
+        {
+            logicLevel = new LogicLevel();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.GET_REGISTRATION_PARAMETERS);
+            var LLResponse = logicLevel.SendRequestCommand();
+            return new GetRegistrationParametersResponse(logicLevel);
+        }
+
+        // GetFirmwareVersion
+        public GetFirmwareVersionResponse GetFirmwareVersion()
+        {
+            logicLevel = new LogicLevel();
+            logicLevel.BuildRequestCommand((byte)CommandEnum.GET_FIRMWARE_VERSION);
+            var LLResponse = logicLevel.SendRequestCommand();
+            return new GetFirmwareVersionResponse(logicLevel);
+        }
 
         //==============================================================================================================================================
 

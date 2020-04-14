@@ -12,6 +12,7 @@ using TerminalFAtest.Helpers;
 using TerminalFAtest.Models.KKTRequest;
 using TerminalFAtest.Models.KKTResponse;
 using TerminalFAtest.Units;
+using static TerminalFAtest.Helpers.LogicLevel;
 
 namespace TerminalFAtest
 {
@@ -45,7 +46,11 @@ namespace TerminalFAtest
         private void SendCashierData_Click(object sender, EventArgs e)
         {
             var kkt = new KKT();
-            CashierData cashierData = new CashierData("Иванов И. И.", "929655906720");
+            CashierData cashierData = new CashierData(
+                "Иванов И. И.", 
+                "929655906720"
+                );
+
             BaseResponse br = kkt.SendCashierData(cashierData);
             string r = new KKTResponseHelper().BuildResponseString(br);
             textBoxLog.AppendText(r);
@@ -121,7 +126,16 @@ namespace TerminalFAtest
         {
             var kkt = new KKT();
 
-            CashierData cashierData = new CashierData("Иванов И. И.", "929655906720");
+            CashierData cashierData = new CashierData(
+                "Иванов И. И.", 
+                "929655906720"
+                );
+
+            ClientData clientData = new ClientData(
+                "khamitovsv@brsc.ru", 
+                "Клиент Петров П. П.", 
+                "929655906720"
+                );
 
             PaymentData paymentData = new PaymentData(
                 TaxTypeEnum.Common,
@@ -130,12 +144,9 @@ namespace TerminalFAtest
                 0,
                 0,
                 0,
-                "khamitovsv@brsc.ru",
-                "",
-                cashierData.CashierFIO,
-                cashierData.CashierINN,
-                "Клиент Петров П. П.",
-                "Доп реквизит",
+                cashierData,
+                clientData,
+                "Доп реквизит для печати",
                 "Наименование доп реквизита пользователя",
                 "Значение доп реквизита пользователя"
                 );
@@ -154,6 +165,133 @@ namespace TerminalFAtest
                 "Длинная строка для печати на чеке до 512 символов"
                 );
             RegisterCheckResponse br = kkt.RegisterCheck(registerCheck);
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void SendAutomaticDeviceData_Click(object sender, EventArgs e)
+        {
+            var kkt = new KKT();
+
+            AutomaticDeviceData automaticDeviceData = new AutomaticDeviceData(
+                "ул. АвтоматоРасчетная, 10",
+                "место - Расчетный автомат",
+                "АБВ-123456"
+                );
+            BaseResponse br = kkt.SendAutomaticDeviceData(automaticDeviceData);
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void GetFnNumber_Click(object sender, EventArgs e)
+        {
+            var kkt = new KKT();
+            BaseResponse br = kkt.GetFnNumber();
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void GetKktStatus_Click(object sender, EventArgs e)
+        {
+            var kkt = new KKT();
+            GetKktStatusResponse br = kkt.GetKktStatus();
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void GetRegistrationParameters_Click(object sender, EventArgs e)
+        {
+            var kkt = new KKT();
+            GetRegistrationParametersResponse br = kkt.GetRegistrationParameters();
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void GetFirmwareVersion_Click(object sender, EventArgs e)
+        {
+            var kkt = new KKT();
+            GetFirmwareVersionResponse br = kkt.GetFirmwareVersion();
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void OpenCorrectionCheck_Click(object sender, EventArgs e)
+        {
+            var kkt = new KKT();
+            BaseResponse br = kkt.OpenCorrectionCheck();
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void SendCorrectionCheckData_Click(object sender, EventArgs e)
+        {
+            AuthorizedPersonData apd = new AuthorizedPersonData("Иванов И. И.", "123456789012");
+
+            var logicLevel = new LogicLevel();
+            var _stlv = new List<byte[]>();
+            byte[] docName = logicLevel.BuildTLV(1177, "Тестовая коррекция");
+            byte[] docDate = logicLevel.BuildTLV(1178, 1583971200);
+            byte[] docNumber = logicLevel.BuildTLV(1179, "1");
+            _stlv.Add(docName);
+            _stlv.Add(docDate);
+            _stlv.Add(docNumber);
+
+            byte[] stlv = logicLevel.BuildSTLV(1174, _stlv);
+
+            CorrectionCheckData cd = new CorrectionCheckData(
+                apd, 
+                0, 
+                TaxTypeEnum.Common,
+                0,
+                184.50M,
+                0,
+                0,
+                0,
+                184.50M,
+                0,
+                0,
+                0,
+                0,
+                0,
+                stlv
+                );
+
+            #region MyRegion
+            /*
+             
+             */
+            #endregion
+
+            var kkt = new KKT();
+            BaseResponse br = kkt.SendCorrectionCheckData(cd);
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void SendCorrectionAutomaticDeviceData_Click(object sender, EventArgs e)
+        {
+            var kkt = new KKT();
+
+            AutomaticDeviceData automaticDeviceData = new AutomaticDeviceData(
+                "ул. АвтоматоРасчетная, 10",
+                "место - Расчетный автомат",
+                "АБВ-123456"
+                );
+            BaseResponse br = kkt.SendCorrectionAutomaticDeviceData(automaticDeviceData);
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
+        }
+
+        private void RegisterCorrectionCheck_Click(object sender, EventArgs e)
+        {
+            // RegisterCorrectionCheckResponse
+            var kkt = new KKT();
+
+            TerminalFAtest.Models.KKTRequest.RegisterCorrectionCheck registerCorrectionCheck = new TerminalFAtest.Models.KKTRequest.RegisterCorrectionCheck(
+                OperationEnum.Sell,
+                184.50M
+                );
+            RegisterCorrectionCheckResponse br = kkt.RegisterCorrectionCheck(registerCorrectionCheck);
             string r = new KKTResponseHelper().BuildResponseString(br);
             textBoxLog.AppendText(r);
         }

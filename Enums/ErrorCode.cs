@@ -185,6 +185,9 @@ namespace TerminalFAtest.Enums
         [Description("Не переданы данные кассира")]
         CashierInfoNotPresented = 0x5E,
 
+        [Description("Невозможно передать параметры автоматического устрйоства в кассовый чек для ККТ, уже зарегистрированной с этими параметрами")]
+        UnableSendAutomaticDeviceData = 0x5F,
+
         [Description("Номер блока прошивки указан некорректно")]
         WrongBlockFirmware = 0x60,
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TerminalFAtest.Models.KKTRequest
 {
-    // Элемент запроса в ККТ
+    // Элемент запроса в ККТ (только для элементов TLV)
     public class KKTRequestProperty<T>
     {
         public int TAG { get; set; }

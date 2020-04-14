@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,7 +15,11 @@ namespace TerminalFAtest.Helpers
 
         public static string GetTypeDescription(Enum type)
         {
-            FieldInfo fi = type.GetType().GetField(type.ToString());
+            FieldInfo fi = type.GetType().GetField(type.ToString()); // тут м б null, надо предусмотреть !!!
+            if (fi is null)
+            {
+                return "Код ошибки отсутствует в списке ошибок";
+            }
             DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
             if (attributes.Length > 0)
             {
@@ -23,6 +28,7 @@ namespace TerminalFAtest.Helpers
             else
             {
                 return type.ToString();
+
             }
         }
 
