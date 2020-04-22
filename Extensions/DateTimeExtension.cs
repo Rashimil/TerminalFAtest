@@ -8,6 +8,7 @@ namespace TerminalFAtest.Extensions
 {
     public static class DateTimeExtension // расширение класса DateTime
     {
+        //==============================================================================================================================================
         public static string XToString(this DateTime source) // возвращает дату и время как строку в корректном виде на deb системах (в виде dd.mm.yyyy hh:mm:ss)
         {
             string Fix(string s)
@@ -24,6 +25,14 @@ namespace TerminalFAtest.Extensions
 
             return day + "." + mounth + "." + year + " " + hh + ":" + mm + ":" + ss;
         }
-    }
 
+        //==============================================================================================================================================
+        public static long TimestampToUnixtime(this string timestamp) // недоделано
+        {
+            DateTime dateTime = DateTime.ParseExact(timestamp, "ddMMyyyy HHmmss", null);
+            return 1;
+        }
+
+        //==============================================================================================================================================
+    }
 }

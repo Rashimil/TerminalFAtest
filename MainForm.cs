@@ -295,5 +295,24 @@ namespace TerminalFAtest
             string r = new KKTResponseHelper().BuildResponseString(br);
             textBoxLog.AppendText(r);
         }
+
+        private void Test_Click(object sender, EventArgs e)
+        {
+            //DateTime dateTime = DateTime.ParseExact("14.07.2020", "dd.MM.yyyy", null);
+            FNFlagsHelper fNFlagsHelper = new FNFlagsHelper();
+            //string res = fNFlagsHelper.DecodeFNFlags(a);
+            //MessageBox.Show(dateTime.Date.ToString());
+
+            byte a = (byte)FNFlagsEnum.FNMEmoryFull;
+            byte b = (byte)FNFlagsEnum.FNCriticalError;
+            int r = a & b;
+
+            MessageBox.Show(a + "(" + fNFlagsHelper.DecodeFNFlags(a) + ")" + " XOR " + b + "(" + fNFlagsHelper.DecodeFNFlags(b) + ")" + " = " + r + "(" + fNFlagsHelper.DecodeFNFlags((byte)r) + ")");
+        }
+
+        private void GetKktInfo_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

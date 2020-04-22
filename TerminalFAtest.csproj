@@ -52,6 +52,8 @@
     <Compile Include="BuildResponseString.cs" />
     <Compile Include="Enums\ErrorCode.cs" />
     <Compile Include="Enums\Command.cs" />
+    <Compile Include="Enums\FNFlags.cs" />
+    <Compile Include="Enums\FNLifePhase.cs" />
     <Compile Include="Enums\Operation.cs" />
     <Compile Include="Enums\PaymenObject.cs" />
     <Compile Include="Enums\PaymentMethod.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="Helpers\ByteOrderHelper.cs" />
     <Compile Include="Helpers\CRC16CCITT.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\FNFlagsHelper.cs" />
     <Compile Include="Helpers\KKTResponseHelper.cs" />
     <Compile Include="Helpers\LogicLevel.cs" />
     <Compile Include="MainForm.cs">
@@ -73,6 +76,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\KktInfoFa.cs" />
     <Compile Include="Models\KKTRequest\AuthorizedPersonData.cs" />
     <Compile Include="Models\KKTRequest\AutomaticDeviceData.cs" />
     <Compile Include="Models\KKTRequest\CashierData.cs" />

@@ -50,6 +50,8 @@
             this.SendCorrectionCheckData = new System.Windows.Forms.Button();
             this.SendCorrectionAutomaticDeviceData = new System.Windows.Forms.Button();
             this.RegisterCorrectionCheck = new System.Windows.Forms.Button();
+            this.Test = new System.Windows.Forms.Button();
+            this.GetKktInfo = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBoxLog
@@ -261,11 +263,33 @@
             this.RegisterCorrectionCheck.UseVisualStyleBackColor = true;
             this.RegisterCorrectionCheck.Click += new System.EventHandler(this.RegisterCorrectionCheck_Click);
             // 
+            // Test
+            // 
+            this.Test.Location = new System.Drawing.Point(819, 441);
+            this.Test.Name = "Test";
+            this.Test.Size = new System.Drawing.Size(226, 28);
+            this.Test.TabIndex = 10000019;
+            this.Test.Text = "Test";
+            this.Test.UseVisualStyleBackColor = true;
+            this.Test.Click += new System.EventHandler(this.Test_Click);
+            // 
+            // GetKktInfo
+            // 
+            this.GetKktInfo.Location = new System.Drawing.Point(819, 300);
+            this.GetKktInfo.Name = "GetKktInfo";
+            this.GetKktInfo.Size = new System.Drawing.Size(226, 28);
+            this.GetKktInfo.TabIndex = 10000020;
+            this.GetKktInfo.Text = "GetKktInfo";
+            this.GetKktInfo.UseVisualStyleBackColor = true;
+            this.GetKktInfo.Click += new System.EventHandler(this.GetKktInfo_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1136, 577);
+            this.Controls.Add(this.GetKktInfo);
+            this.Controls.Add(this.Test);
             this.Controls.Add(this.RegisterCorrectionCheck);
             this.Controls.Add(this.SendCorrectionAutomaticDeviceData);
             this.Controls.Add(this.SendCorrectionCheckData);
@@ -321,6 +345,8 @@
         private System.Windows.Forms.Button SendCorrectionCheckData;
         private System.Windows.Forms.Button SendCorrectionAutomaticDeviceData;
         private System.Windows.Forms.Button RegisterCorrectionCheck;
+        private System.Windows.Forms.Button Test;
+        private System.Windows.Forms.Button GetKktInfo;
     }
 }
 
