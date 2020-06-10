@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TerminalFAtest.Enums;
 using TerminalFAtest.Helpers;
+using TerminalFAtest.Models;
 using TerminalFAtest.Models.KKTRequest;
 using TerminalFAtest.Models.KKTResponse;
 using TerminalFAtest.Units;
@@ -298,6 +299,7 @@ namespace TerminalFAtest
 
         private void Test_Click(object sender, EventArgs e)
         {
+            /*
             //DateTime dateTime = DateTime.ParseExact("14.07.2020", "dd.MM.yyyy", null);
             FNFlagsHelper fNFlagsHelper = new FNFlagsHelper();
             //string res = fNFlagsHelper.DecodeFNFlags(a);
@@ -308,6 +310,12 @@ namespace TerminalFAtest
             int r = a & b;
 
             MessageBox.Show(a + "(" + fNFlagsHelper.DecodeFNFlags(a) + ")" + " XOR " + b + "(" + fNFlagsHelper.DecodeFNFlags(b) + ")" + " = " + r + "(" + fNFlagsHelper.DecodeFNFlags((byte)r) + ")");
+            */
+
+            var kkt = new KKT();
+            KktRegistrationReport br = kkt.GetKktRegistrationReport(1);
+            string r = new KKTResponseHelper().BuildResponseString(br);
+            textBoxLog.AppendText(r);
         }
 
         private void GetKktInfo_Click(object sender, EventArgs e)

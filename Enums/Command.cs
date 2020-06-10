@@ -31,6 +31,7 @@
         CUT = 0x62,
         REGISTRATION_PARAMETERS = 0x0A,
         CANCEL_DOCUMENT = 0x10,
+        GET_REGISTRATION_REPORT = 0x3B, // отчет о регистрации по всем тэгам
 
         KKT_RESTART = 0xEF // Перезагрузка ККТ
     }

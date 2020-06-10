@@ -722,10 +722,21 @@ namespace TerminalFAtest.Units
         public KktInfoFa GetKktInfo()
         {
             KktInfoFa result = new KktInfoFa();
-            //return null;
+            return null;
         }
 
         //==============================================================================================================================================
+
+        // Получение отчета о регистрации ККТ по всем тэгам. Занимает время
+        public KktRegistrationReport GetKktRegistrationReport(int reportNumber)
+        {
+            reportNumber = 1;
+            logicLevel = new LogicLevel();
+            byte[] DATA = logicLevel.ConvertToByteArray<int>(reportNumber);
+            logicLevel.BuildRequestCommand((byte)CommandEnum.GET_REGISTRATION_REPORT, DATA);
+            var LLResponse = logicLevel.SendRequestCommand();
+            return new KktRegistrationReport(logicLevel.response.DATA, logicLevel);
+        }
 
 
         //==============================================================================================================================================

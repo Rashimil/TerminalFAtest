@@ -36,6 +36,9 @@
     <ApplicationIcon>space_base_icon-icons.com_60265.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\IndexAttribute.cs" />
+    <Compile Include="Attributes\TagAttribute.cs" />
     <Compile Include="BuildResponseString.cs" />
     <Compile Include="Enums\ErrorCode.cs" />
     <Compile Include="Enums\Command.cs" />
@@ -77,6 +82,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\KktInfoFa.cs" />
+    <Compile Include="Models\KktRegistrationReport.cs" />
     <Compile Include="Models\KKTRequest\AuthorizedPersonData.cs" />
     <Compile Include="Models\KKTRequest\AutomaticDeviceData.cs" />
     <Compile Include="Models\KKTRequest\CashierData.cs" />
@@ -117,6 +123,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

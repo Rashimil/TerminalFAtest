@@ -378,6 +378,10 @@ namespace TerminalFAtest.Helpers
             {
                 return Encoding.GetEncoding(866).GetString(data);
             }
+            public bool ToBoolean(byte[] data)
+            {
+                return data[0] == 1 ? true : false;
+            }
             public byte ToByte(byte[] data)
             {
                 return data[0];
@@ -419,8 +423,8 @@ namespace TerminalFAtest.Helpers
                 if (data.Length == 5) // формат YMDHm (DATETIME[5])
                 {
                     int day = BitConverter.ToInt16(new byte[] { data[2], 0 }, 0);
-                    int mounth = BitConverter.ToInt16(new byte[] { data[1], 0}, 0);
-                    int year = 2000 + BitConverter.ToInt16(new byte[] {data[0], 0 }, 0);
+                    int mounth = BitConverter.ToInt16(new byte[] { data[1], 0 }, 0);
+                    int year = 2000 + BitConverter.ToInt16(new byte[] { data[0], 0 }, 0);
                     int hh = BitConverter.ToInt16(new byte[] { data[3], 0 }, 0);
                     int mm = BitConverter.ToInt16(new byte[] { data[4], 0 }, 0);
                     int ss = 0;
@@ -436,11 +440,75 @@ namespace TerminalFAtest.Helpers
                     int ss = 0;
                     return new DateTime(year, mounth, day, hh, mm, ss);
                 }
+                else if (data.Length == 4) // формат unixtime в секундах
+                {
+                    int unixtime = BitConverter.ToInt32(data, 0);
+                    return new DateTime(1970, 1, 1, 5, 0, 0, DateTimeKind.Utc).AddSeconds(unixtime);
+                }
                 else
                 {
                     return DateTime.MinValue;
                 }
             }
+            public dynamic ToGenericType(byte[] data, Type type)
+            {
+                //var t = typeof(T);
+                var t = type;
+                if (t == typeof(string))
+                {
+                    return ToString(data) as string;
+                }
+                else if (t == typeof(bool))
+                {
+                    return ToBoolean(data) as bool?;
+                }
+                else if (t == typeof(byte))
+                {
+                    return ToByte(data) as byte?;
+                }
+                else if (t == typeof(ushort))
+                {
+                    return ToUShort(data) as ushort?;
+                }
+                else if (t == typeof(short))
+                {
+                    return ToShort(data) as short?;
+                }
+                else if (t == typeof(int))
+                {
+                    return ToInt(data) as int?;
+                }
+                else if (t == typeof(uint))
+                {
+                    return ToUInt(data) as uint?;
+                }
+                else if (t == typeof(ulong))
+                {
+                    return ToULong(data) as ulong?;
+                }
+                else if (t == typeof(long))
+                {
+                    return ToLong(data) as long?;
+                }
+                else if (t == typeof(float))
+                {
+                    return ToFloat(data) as float?;
+                }
+                else if (t == typeof(double))
+                {
+                    return ToDouble(data) as double?;
+                }
+                else if (t == typeof(DateTime))
+                {
+                    return ToDateTime(data) as DateTime?;
+                }
+                else
+                {
+                    // return null;
+                    return type;
+                }
+            }
+
         }
 
         //==============================================================================================================================================
