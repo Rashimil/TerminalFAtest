@@ -71,6 +71,7 @@
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Helpers\ByteOrderHelper.cs" />
     <Compile Include="Helpers\CRC16CCITT.cs" />
+    <Compile Include="Helpers\DateTimeHelper.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\FNFlagsHelper.cs" />
     <Compile Include="Helpers\KKTResponseHelper.cs" />

@@ -103,6 +103,7 @@ B6 11
         */
         #endregion
         byte[] TLVs;
+        public DateTimeHelper dateTimeHelper = new DateTimeHelper(); 
         public KktRegistrationReport(byte[] registrationReportTLVs, LogicLevel logicLevel)
         {
             if (registrationReportTLVs.Length > 12) // минимально 
@@ -152,6 +153,12 @@ B6 11
                     else // оригинальный тип данных в ККТ НЕ совпадает с моделью (теги 1012 1062 1209 1189), надо обрабатывать отдельно
                     {
                         if (TAG == 1012) // Дата и время документа, originType - unt, время в формате unixtime UTC, надо конвертить в нормальный формат dd.MM.yyyy HH.mm.ss
+                        {
+                            int unixtime = logicLevel.ConvertFromByteArray.ToInt(value);
+                            var val = dateTimeHelper.UnixtimeToDateTime(unixtime).ToString("dd.MM.yyyy HH:mm:ss");
+                            prop.SetValue(this, val);
+                        }
+                        else if (TAG == 1062) // Cистемы налогообложения. Битовая маска. 
                         {
 
                         }
