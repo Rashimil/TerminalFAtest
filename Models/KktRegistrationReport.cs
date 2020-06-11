@@ -142,15 +142,15 @@ B6 11
                     int TAG = (TAGAttr != null) ? (int)TAGAttr.ConstructorArguments[0].Value : 0; // значение атрибута Tag
                     Type originType = (TAGAttr != null) ? (Type)TAGAttr.ConstructorArguments[1].Value : null; // оригинальный тип из ККТ
                     Type type = prop.PropertyType; // тип для вывода в класс
-                    string p_name = prop.Name; // имя свойства
-                    string Description = (descriptionAttr != null) ? (string)descriptionAttr.ConstructorArguments[0].Value : ""; // описание свойства
+                    //string p_name = prop.Name; // имя свойства
+                    //string Description = (descriptionAttr != null) ? (string)descriptionAttr.ConstructorArguments[0].Value : ""; // описание свойства
                     byte[] value = (TLVList.Where(c => logicLevel.ConvertFromByteArray.ToShort(c.TAG.XReverse().ToArray()) == TAG).FirstOrDefault().VALUE != null) ? TLVList.Where(c => logicLevel.ConvertFromByteArray.ToShort(c.TAG.XReverse().ToArray()) == TAG).FirstOrDefault().VALUE : new byte[1] { 0x00 }; // значение свойства
 
                     if (originType == null) // оригинальный тип данных в ККТ совпадает с моделью, можно заполнять соответствующее свойство
                     {
                         prop.SetValue(this, logicLevel.ConvertFromByteArray.ToGenericType(value.XReverse().ToArray(), type));
                     }
-                    else // оригинальный тип данных в ККТ НЕ совпадает с моделью (теги 1012 1062 1209 1189), надо обрабатывать отдельно
+                    else // оригинальный тип данных в ККТ НЕ совпадает с моделью (например теги 1012 1062 1209 1189), такое надо обрабатывать отдельно для каждого тэга
                     {
                         if (TAG == 1012) // Дата и время документа, originType - unt, время в формате unixtime UTC, надо конвертить в нормальный формат dd.MM.yyyy HH.mm.ss
                         {
@@ -162,6 +162,7 @@ B6 11
                         {
 
                         }
+                        // + отдельно надо проверить ФПД - он глючно парсится ка строка, хз почему...
                     }
                 } // останов
             }
