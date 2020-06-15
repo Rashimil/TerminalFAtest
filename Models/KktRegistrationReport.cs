@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TerminalFAtest.Attributes;
+using TerminalFAtest.Enums;
 using TerminalFAtest.Extensions;
 using TerminalFAtest.Helpers;
 using TerminalFAtest.Models.KKTResponse;
@@ -104,12 +105,12 @@ B6 11
         #endregion
         byte[] TLVs;
         public DateTimeHelper dateTimeHelper = new DateTimeHelper(); 
-        public KktRegistrationReport(byte[] registrationReportTLVs, LogicLevel logicLevel)
+        public KktRegistrationReport(LogicLevel logicLevel)
         {
-            if (registrationReportTLVs.Length > 12) // минимально 
+            if (logicLevel.response.DATA.Length > 12) // минимально 
             {
                 //TLVs = registrationReportTLVs.Skip(5).Take(registrationReportTLVs.Length - 7).ToArray();
-                TLVs = registrationReportTLVs; // ведь не факт что придет полный TLV а не только VALUE
+                TLVs = logicLevel.response.DATA; // ведь не факт что придет полный TLV а не только VALUE
 
                 List<LogicLevel.TLV> GetTLV(byte[] data, List<LogicLevel.TLV> TLVs, int pos = 0) // рекурсивная функция парсинга всех TLV из byte[] DATA
                 {
@@ -160,9 +161,40 @@ B6 11
                         }
                         else if (TAG == 1062) // Cистемы налогообложения. Битовая маска. 
                         {
-
+                            var a = value[0];
+                            string TaxTypesDescription = "";
+                            foreach (var item in Enum.GetValues(typeof(TaxTypeEnum))) // цикл по полям enum
+                            {
+                                var b = (byte)(TaxTypeEnum)item;
+                                int r = a & b; // 
+                                if (r != 0 && r == b) // если есть пересечение и результат = item
+                                {
+                                    TaxTypesDescription += (EnumHelper.GetTypeDescription((TaxTypeEnum)item) + ", ");
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(TaxTypesDescription) && TaxTypesDescription.Length >= 2)
+                                TaxTypesDescription = TaxTypesDescription.Remove(TaxTypesDescription.Length - 2);
+                            var val = TaxTypesDescription;
+                            prop.SetValue(this, val);
                         }
-                        // + отдельно надо проверить ФПД - он глючно парсится ка строка, хз почему...
+                        else if (TAG == 1209) // версия ФФД (2 = 1.05, 3 = 1.1)
+                        {
+                            var a = value[0];
+                            var val = EnumHelper.GetTypeDescription((FFDVersionEnum)a);
+                            prop.SetValue(this, val);
+                        }
+                        else if (TAG == 1189) // версия ФФД ККТ (2 = 1.05, 3 = 1.1)
+                        {
+                            var a = value[0];
+                            var val = EnumHelper.GetTypeDescription((FFDVersionEnum)a);
+                            prop.SetValue(this, val);
+                        }
+                        else if (TAG == 1077) // ФПД, в массиве из 6 байт на печать выводятся байты 2-5, которые интерпретируются, как UInt32, big endian
+                        {
+                            var a = value.Skip(2).ToArray();
+                            var val = logicLevel.ConvertFromByteArray.ToInt(a.Reverse().ToArray()).ToString();
+                            prop.SetValue(this, val);
+                        }
                     }
                 } // останов
             }
@@ -190,7 +222,7 @@ B6 11
         [Description("Дата и время документа")]
         public string DocumentDateTime { get; set; } // unixtime UTC !!! надо конвертить в нормальный формат dd.MM.yyyy HH.mm.ss
 
-        [Tag(1077)]
+        [Tag(1077, typeof(int))]
         [Description("Фискальный признак документа")]
         public string FPD { get; set; }
 

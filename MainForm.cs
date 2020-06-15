@@ -313,7 +313,7 @@ namespace TerminalFAtest
             */
 
             var kkt = new KKT();
-            KktRegistrationReport br = kkt.GetKktRegistrationReport(1);
+            KktRegistrationReport br = kkt.GetKktRegistrationReport();
             string r = new KKTResponseHelper().BuildResponseString(br);
             textBoxLog.AppendText(r);
         }

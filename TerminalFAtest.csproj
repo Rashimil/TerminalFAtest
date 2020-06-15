@@ -57,6 +57,7 @@
     <Compile Include="BuildResponseString.cs" />
     <Compile Include="Enums\ErrorCode.cs" />
     <Compile Include="Enums\Command.cs" />
+    <Compile Include="Enums\FFDVersion.cs" />
     <Compile Include="Enums\FNFlags.cs" />
     <Compile Include="Enums\FNLifePhase.cs" />
     <Compile Include="Enums\Operation.cs" />
